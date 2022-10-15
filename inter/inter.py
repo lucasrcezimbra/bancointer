@@ -5,6 +5,7 @@ class URL:
     BASE = 'https://cdpj.partners.bancointer.com.br/'
     AUTH = BASE + 'oauth/v2/token'
     STATEMENTS = BASE + 'banking/v2/extrato'
+    BALANCE = BASE + 'banking/v2/saldo'
 
 
 class Inter:
@@ -37,6 +38,20 @@ class Inter:
     @property
     def headers(self):
         return {"Authorization": f"Bearer {self.token}"}
+
+    def get_balance(self, date=None):
+        params = {}
+
+        if date:
+            params['dataSaldo'] = date.strftime('%Y-%m-%d')
+
+        response = requests.get(
+            URL.BALANCE,
+            params=params,
+            headers=self.headers,
+            cert=(self.cert_path, self.key_path),
+        )
+        return response.json()
 
     def get_statements(self, start_date, end_date):
         response = requests.get(

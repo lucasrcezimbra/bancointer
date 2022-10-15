@@ -23,3 +23,8 @@ def statements_data():
             }
         ]
     }
+
+
+@pytest.fixture
+def balance_data():
+    return {'disponivel': 1234.56}
