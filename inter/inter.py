@@ -4,6 +4,7 @@ import requests
 class URL:
     BASE = 'https://cdpj.partners.bancointer.com.br/'
     AUTH = BASE + 'oauth/v2/token'
+    STATEMENTS = BASE + 'banking/v2/extrato'
 
 
 class Inter:
@@ -32,3 +33,19 @@ class Inter:
         if not self._token:
             self._token = self._get_token()
         return self._token
+
+    @property
+    def headers(self):
+        return {"Authorization": f"Bearer {self.token}"}
+
+    def get_statements(self, start_date, end_date):
+        response = requests.get(
+            URL.STATEMENTS,
+            params={
+                'dataInicio': start_date.strftime('%Y-%m-%d'),
+                'dataFim': end_date.strftime('%Y-%m-%d'),
+            },
+            headers=self.headers,
+            cert=(self.cert_path, self.key_path),
+        )
+        return response.json()

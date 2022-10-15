@@ -61,3 +61,35 @@ def test_cached_token(inter):
     inter._token = token
 
     assert inter.token == token
+
+
+def test_headers(inter):
+    token = str(uuid4())
+
+    inter._token = token
+
+    assert inter.headers == {"Authorization": f"Bearer {inter.token}"}
+
+
+@responses.activate
+def test_get_statements(faker, inter, statements_data):
+    inter._token = uuid4()
+    start, end = faker.past_date(), faker.past_date()
+
+    responses.get(
+        URL.STATEMENTS,
+        json=statements_data,
+        status=200,
+        match=[
+            matchers.query_param_matcher(
+                {
+                    'dataInicio': start.strftime('%Y-%m-%d'),
+                    'dataFim': end.strftime('%Y-%m-%d'),
+                }
+            ),
+            matchers.header_matcher(inter.headers),
+            matchers.request_kwargs_matcher({'cert': (inter.cert_path, inter.key_path)})
+        ],
+    )
+
+    assert inter.get_statements(start, end) == statements_data
