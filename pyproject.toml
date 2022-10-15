@@ -21,16 +21,15 @@ classifiers = [
   'Programming Language :: Python :: 3.9',
   'Programming Language :: Python :: 3.10',
 ]
+dependencies = [
+  "requests==2.28.1",
+]
 
 [project.urls]
 homepage = "https://github.com/lucasrcezimbra/bancointer"
 documentation = "https://bancointer.readthedocs.io/"
 repository = "https://github.com/lucasrcezimbra/bancointer"
 changelog = "https://github.com/lucasrcezimbra/bancointer/blob/main/CHANGELOG.md"
-
-dependencies = [
-  "requests==2.28.1",
-]
 
 [project.optional-dependencies]
 build = [
