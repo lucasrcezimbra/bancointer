@@ -1,4 +1,4 @@
-inter
+API
 =====
 
 .. toctree::
