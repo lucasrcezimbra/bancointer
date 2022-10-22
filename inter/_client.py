@@ -8,7 +8,7 @@ class URL:
     BALANCE = BASE + 'banking/v2/saldo'
 
 
-class Inter:
+class Client:
     def __init__(self, client_id, client_secret, cert_path, key_path):
         self.client_id = client_id
         self.client_secret = client_secret
