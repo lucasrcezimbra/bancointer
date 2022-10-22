@@ -1,4 +1,5 @@
 from inter._client import Client  # noqa
+from inter._inter import Inter  # noqa
 
 __author__ = """Lucas Rangel Cezimbra"""
 __email__ = 'lucas@cezimbra.tec.br'
