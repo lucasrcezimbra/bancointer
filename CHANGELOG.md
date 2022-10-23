@@ -1,7 +1,8 @@
 # Changelog
 
 
-## (unreleased)
+## 0.0.4 (unreleased)
+- Add High Level API
 - Fix Read the Docs
 - Fix Coveralls
 
