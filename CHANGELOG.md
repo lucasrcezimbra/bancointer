@@ -1,7 +1,7 @@
 # Changelog
 
 
-## 0.0.4 (unreleased)
+## 0.0.4 (2022-10-23)
 - Add High Level API
 - Fix Read the Docs
 - Fix Coveralls
