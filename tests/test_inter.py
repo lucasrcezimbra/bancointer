@@ -1,131 +1,70 @@
-from uuid import uuid4
+from datetime import datetime
+from decimal import Decimal
 
-import pytest
-import responses
-from responses import matchers
-
-from inter import URL, Inter
+from inter import Inter
+from inter._client import Client
+from inter._inter import Operation
 
 
-@pytest.fixture
-def inter(faker):
+def test_init():
+    client = object
+
+    inter = Inter(client)
+
+    assert inter._client == client
+
+
+def test_from_credentials(faker, mocker):
+    client_mock = mocker.patch('inter._inter.Client', autospec=True)
     client_id, client_secret = faker.pystr(), faker.pystr()
     cert_path, key_path = faker.file_path(), faker.file_path()
-    return Inter(client_id, client_secret, cert_path, key_path)
+
+    inter = Inter.from_credentials(client_id, client_secret, cert_path, key_path)
+
+    assert isinstance(inter._client, Client)
+    client_mock.assert_called_once_with(client_id, client_secret, cert_path, key_path)
 
 
-def test_init(faker):
-    client_id, client_secret = faker.pystr(), faker.pystr()
-    cert_path, key_path = faker.file_path(), faker.file_path()
+def test_get_balance(faker, mocker, balance_data):
+    client = mocker.MagicMock(spec=Client)
+    client.get_balance.return_value = balance_data
 
-    inter = Inter(client_id, client_secret, cert_path, key_path)
+    inter = Inter(client)
 
-    assert inter.client_id == client_id
-    assert inter.client_secret == client_secret
-    assert inter.cert_path == cert_path
-    assert inter.key_path == key_path
+    assert inter.get_balance() == Decimal(str(balance_data['disponivel']))
 
 
-@responses.activate
-def test_token(inter):
-    token = str(uuid4())
-
-    responses.post(
-        URL.AUTH,
-        json={
-            "access_token": token,
-            "token_type": "Bearer",
-            "expires_in": 3600,
-            "scope": "extrato.read",
-        },
-        status=200,
-        match=[
-            matchers.urlencoded_params_matcher(
-                {
-                    'client_id': inter.client_id,
-                    'client_secret': inter.client_secret,
-                    'scope': 'extrato.read',
-                    'grant_type': 'client_credentials',
-                }
-            ),
-            matchers.request_kwargs_matcher({'cert': (inter.cert_path, inter.key_path)})
-        ],
-    )
-
-    assert inter.token == token
-
-
-def test_cached_token(inter):
-    token = str(uuid4())
-
-    inter._token = token
-
-    assert inter.token == token
-
-
-def test_headers(inter):
-    token = str(uuid4())
-
-    inter._token = token
-
-    assert inter.headers == {"Authorization": f"Bearer {inter.token}"}
-
-
-@responses.activate
-def test_get_statements(faker, inter, statements_data):
-    inter._token = uuid4()
-    start, end = faker.past_date(), faker.past_date()
-
-    responses.get(
-        URL.STATEMENTS,
-        json=statements_data,
-        status=200,
-        match=[
-            matchers.query_param_matcher(
-                {
-                    'dataInicio': start.strftime('%Y-%m-%d'),
-                    'dataFim': end.strftime('%Y-%m-%d'),
-                }
-            ),
-            matchers.header_matcher(inter.headers),
-            matchers.request_kwargs_matcher({'cert': (inter.cert_path, inter.key_path)})
-        ],
-    )
-
-    assert inter.get_statements(start, end) == statements_data
-
-
-@responses.activate
-def test_get_balance(faker, inter, balance_data):
-    inter._token = uuid4()
-
-    responses.get(
-        URL.BALANCE,
-        json=balance_data,
-        status=200,
-        match=[
-            matchers.header_matcher(inter.headers),
-            matchers.request_kwargs_matcher({'cert': (inter.cert_path, inter.key_path)})
-        ],
-    )
-
-    assert inter.get_balance() == balance_data
-
-
-@responses.activate
-def test_get_balance_with_date(faker, inter, balance_data):
-    inter._token = uuid4()
+def test_get_balance_with_date(faker, mocker, balance_data):
+    client_mock = mocker.MagicMock(spec=Client)
+    client_mock.get_balance.return_value = balance_data
     date = faker.past_date()
 
-    responses.get(
-        URL.BALANCE,
-        json=balance_data,
-        status=200,
-        match=[
-            matchers.query_param_matcher({'dataSaldo': date.strftime('%Y-%m-%d')}),
-            matchers.header_matcher(inter.headers),
-            matchers.request_kwargs_matcher({'cert': (inter.cert_path, inter.key_path)})
-        ],
-    )
+    Inter(client_mock).get_balance(date)
 
-    assert inter.get_balance(date) == balance_data
+    client_mock.get_balance.assert_called_once_with(date)
+
+
+def test_get_statement(faker, mocker, statements_data):
+    client_mock = mocker.MagicMock(spec=Client)
+    client_mock.get_statements.return_value = statements_data
+    start_date, end_date = faker.past_date(), faker.past_date()
+
+    Inter(client_mock).get_statement(start_date, end_date)
+
+    client_mock.get_statements.assert_called_once_with(start_date, end_date)
+
+
+def test_get_statement_result(faker, mocker, statements_data):
+    client_mock = mocker.MagicMock(spec=Client)
+    client_mock.get_statements.return_value = statements_data
+
+    statements = Inter(client_mock).get_statement(faker.past_date(), faker.past_date())
+
+    assert isinstance(statements, list)
+    statement, data = statements[0], statements_data['transacoes'][0]
+    assert isinstance(statement, Operation)
+    assert statement.date == datetime.strptime(data['dataEntrada'], '%Y-%m-%d').date()
+    assert statement.type == data['tipoTransacao']
+    assert statement.value == Decimal(str(data['valor']))
+    assert statement.title == data['titulo']
+    assert statement.description == data['descricao']

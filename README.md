@@ -19,10 +19,24 @@ pip install bancointer
 
 ## How to Use
 
+### High-level API
+```python
+from inter import Inter
+
+
+inter = Inter.from_credentials(
+    "YOUR_CLIENT_ID",
+    "YOUR_CLIENT_SECRET"
+    '/path/to/certificado.crt',
+    '/path/to/chave.key',
+)
+```
+
+### Low-level API
 ```python
 from datetime import date
 
-from inter import Inter
+from inter import Client as Inter
 
 
 inter = Inter(

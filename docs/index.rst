@@ -6,7 +6,7 @@ Welcome to Banco Inter's documentation!
    :caption: Contents:
 
    readme
-   modules
+   api
    changelog
 
 Indices and tables
