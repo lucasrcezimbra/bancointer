@@ -36,7 +36,7 @@ class Inter:
         :type end_date: :class:`datetime.date`
 
         :return: lista de operações do periodo
-        :rtype: :class:`List[Operation]`
+        :rtype: List[:class:`Operation`]
         """
         data = self._client.get_statements(start_date, end_date)['transacoes']
         return [Operation.from_data(d) for d in data]
@@ -51,13 +51,31 @@ class Operation:
     DEBIT = 'D'
 
     date: date
+    "Data da operação"
+
     description: str
+    "Descrição da Operação"
+
     title: str
+    "Título da Operação"
+
     type: str
+    "Tipo da operação. Exemplo: :attr:`PAYMENT`, :attr:`PIX`, etc."
+
     value: Decimal
+    "Valor da operação. Positivo se for crédito, negativo se for débito"
 
     @classmethod
     def from_data(cls, data):
+        """
+        Transforma dados retornados da API em um objeto :class:`Operation`.
+
+        :param data: dicionário com dados de uma operação
+        :type data: `dict`
+
+        :return: Operação
+        :rtype: :class:`Operation`
+        """
         value = Decimal(str(data['valor']))
         value = (value * -1) if data['tipoOperacao'] == cls.DEBIT else value
 

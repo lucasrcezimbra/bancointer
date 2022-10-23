@@ -8,6 +8,6 @@ Module contents
 ---------------
 
 .. automodule:: inter
-   :members: Inter, Client
+   :members: Inter, Client, Operation
    :undoc-members:
    :show-inheritance:
