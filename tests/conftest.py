@@ -6,6 +6,14 @@ def statements_data():
     return {
         'transacoes': [
             {
+                'dataEntrada': '2022-09-11',
+                'tipoTransacao': 'PIX',
+                'tipoOperacao': 'C',
+                'valor': '123.45',
+                'titulo': 'Pix recebido',
+                'descricao': 'PIX RECEBIDO - Cp :12345678-EMPRESA TECNOLOGIA LTDA',
+            },
+            {
                 'dataEntrada': '2022-09-10',
                 'tipoTransacao': 'PAGAMENTO',
                 'tipoOperacao': 'D',
