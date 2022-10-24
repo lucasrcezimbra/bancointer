@@ -32,6 +32,23 @@ inter = Inter.from_credentials(
 )
 ```
 
+#### Testing
+```python
+from inter.testing import InterFake
+
+
+def my_function(inter):
+    return inter.get_balance()
+
+
+def test_my_function():
+    inter = InterFake()
+
+    result = my_function(inter)
+
+    assert result == inter.balance
+```
+
 ### Low-level API
 ```python
 from datetime import date
@@ -48,6 +65,23 @@ inter = Inter(
 
 # get September/2022 statements
 inter.get_statements(date(2022, 9, 1), date(2022, 9, 30))
+```
+
+#### Testing
+```python
+from inter.testing import ClientFake
+
+
+def my_function(client):
+    return client.get_balance()
+
+
+def test_my_function():
+    client = ClientFake()
+
+    result = my_function(client)
+
+    assert result == client.balance
 ```
 
 
