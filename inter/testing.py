@@ -2,7 +2,7 @@ import random
 
 from faker import Faker
 
-from inter import Client, Operation
+from inter import Client, Inter, Operation
 
 faker = Faker()
 
@@ -52,3 +52,52 @@ class ClientFake(Client):
         {'statements': 'custom'}
         """
         return self.statements
+
+
+class InterFake(Inter):
+    def __init__(self):
+        self.balance = faker.pydecimal(right_digits=2)
+
+    def get_balance(self, date=None):
+        """
+        Retorna dados fakes simulando a resposta do client real.
+        Sobreescreva `InterFake.balance` para customizar o retorno.
+
+        >>> from decimal import Decimal
+        >>>
+        >>> inter = InterFake()
+        >>>
+        >>> inter.balance = Decimal('1000.99')
+        >>> inter.get_balance()
+        Decimal('1000.99')
+        """
+        return self.balance
+
+    def get_statement(self, start_date, end_date):
+        """
+        Retorna dados fakes simulando a resposta do client real.
+        Sobreescreva `InterFake.statement` para customizar o retorno.
+
+        >>> from decimal import Decimal
+        >>> from datetime import date
+        >>> from inter import Operation
+        >>>
+        >>> inter = InterFake()
+        >>>
+        >>> operation = Operation(
+        ...     date=date.today(),
+        ...     description='Descrição da Operação',
+        ...     title='Pagamento efetuado',
+        ...     type=Operation.PIX,
+        ...     value=Decimal('123.45'),
+        ... )
+        >>>
+        >>> inter.statement = [operation]
+        >>> inter.get_statement(date.today(), date.today())  # doctest: +NORMALIZE_WHITESPACE
+        [Operation(date=datetime.date(2022, 10, 24),
+                   description='Descrição da Operação',
+                   title='Pagamento efetuado',
+                   type='PIX',
+                   value=Decimal('123.45'))]
+        """
+        return self.statement
