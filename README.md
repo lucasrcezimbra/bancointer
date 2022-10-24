@@ -50,6 +50,23 @@ inter = Inter(
 inter.get_statements(date(2022, 9, 1), date(2022, 9, 30))
 ```
 
+#### Testing
+```python
+from inter.testing import ClientFake
+
+
+def my_function(client):
+    return client.get_balance()
+
+
+def test_my_function():
+    client = ClientFake()
+
+    result = my_function(client)
+
+    assert result == client.balence
+```
+
 
 
 
