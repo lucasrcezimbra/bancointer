@@ -46,6 +46,7 @@ class Inter:
 class Operation:
     PAYMENT = 'PAGAMENTO'
     PIX = 'PIX'
+    TYPES = (PAYMENT, PIX)
 
     CREDIT = 'C'
     DEBIT = 'D'
