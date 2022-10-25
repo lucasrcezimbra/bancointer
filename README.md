@@ -24,12 +24,15 @@ pip install bancointer
 from inter import Inter
 
 
-inter = Inter.from_credentials(
-    "YOUR_CLIENT_ID",
-    "YOUR_CLIENT_SECRET"
-    '/path/to/certificado.crt',
-    '/path/to/chave.key',
+inter = Inter(
+    client_id="YOUR_CLIENT_ID",
+    client_secret="YOUR_CLIENT_SECRET"
+    cert_path='/path/to/certificado.crt',
+    key_path='/path/to/chave.key',
 )
+
+# get September/2022 statements
+inter.get_statements(date(2022, 9, 1), date(2022, 9, 30))
 ```
 
 #### Testing

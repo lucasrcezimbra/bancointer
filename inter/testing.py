@@ -55,7 +55,7 @@ class ClientFake(Client):
 
 
 class InterFake(Inter):
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.balance = faker.pydecimal(right_digits=2)
 
     def get_balance(self, date=None):
