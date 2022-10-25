@@ -7,12 +7,36 @@ from inter._client import Client
 
 
 class Inter:
-    def __init__(self, client):
-        self._client = client
+    """
+    Inicializa utilizando as credenciais ou um :class:`Client`.
 
-    @classmethod
-    def from_credentials(cls, client_id, client_secret, cert_path, key_path):
-        return cls(client=Client(client_id, client_secret, cert_path, key_path))
+    :param client_id: Client ID
+    :type client_id: str
+
+    :param client_secret: Client Secret
+    :type client_secret: str
+
+    :param cert_path: Caminho do arquivo de certificado
+    :type cert_path: str
+
+    :param key_path: Caminho do arquivo de chave
+    :type key_path: str
+
+    :param client: Ao invés de inicializar com as credenciais é possivel
+        passar um :class:`Client` já inicializado. Útil para testes.
+    :type client: Client
+    """
+    def __init__(
+        self,
+        *,
+        client_id=None,
+        client_secret=None,
+        cert_path=None,
+        key_path=None,
+        client=None
+    ):
+        assert client or (client_id and client_secret and cert_path and key_path)
+        self._client = client or Client(client_id, client_secret, cert_path, key_path)
 
     def get_balance(self, date=None):
         """

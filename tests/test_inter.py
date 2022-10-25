@@ -10,17 +10,22 @@ from inter.testing import ClientFake
 def test_init():
     client = ClientFake()
 
-    inter = Inter(client)
+    inter = Inter(client=client)
 
     assert inter._client == client
 
 
-def test_from_credentials(faker, mocker):
+def test_init_from_credentials(faker, mocker):
     client_mock = mocker.patch('inter._inter.Client', autospec=True)
     client_id, client_secret = faker.pystr(), faker.pystr()
     cert_path, key_path = faker.file_path(), faker.file_path()
 
-    inter = Inter.from_credentials(client_id, client_secret, cert_path, key_path)
+    inter = Inter(
+        client_id=client_id,
+        client_secret=client_secret,
+        cert_path=cert_path,
+        key_path=key_path,
+    )
 
     assert isinstance(inter._client, Client)
     client_mock.assert_called_once_with(client_id, client_secret, cert_path, key_path)
@@ -30,7 +35,7 @@ def test_get_balance(faker, mocker):
     client = ClientFake()
     balance_data = client.balance
 
-    inter = Inter(client)
+    inter = Inter(client=client)
 
     assert inter.get_balance() == Decimal(str(balance_data['disponivel']))
 
@@ -40,7 +45,7 @@ def test_get_balance_with_date(faker, mocker, balance_data):
     get_balance_spy = mocker.spy(client, 'get_balance')
     date = faker.past_date()
 
-    Inter(client).get_balance(date)
+    Inter(client=client).get_balance(date)
 
     get_balance_spy.assert_called_once_with(date)
 
@@ -49,7 +54,7 @@ def test_get_statement(faker, mocker, statements_data):
     client_mock = mocker.MagicMock(spec=Client)
     start_date, end_date = faker.past_date(), faker.past_date()
 
-    Inter(client_mock).get_statement(start_date, end_date)
+    Inter(client=client_mock).get_statement(start_date, end_date)
 
     client_mock.get_statements.assert_called_once_with(start_date, end_date)
 
@@ -59,7 +64,7 @@ def test_get_statement_result(faker, mocker):
     client.statements['transacoes'][0]['tipoOperacao'] = 'C'
     statements_data = client.statements
 
-    statement = Inter(client).get_statement(faker.past_date(), faker.past_date())
+    statement = Inter(client=client).get_statement(faker.past_date(), faker.past_date())
 
     assert isinstance(statement, list)
     operation, data = statement[0], statements_data['transacoes'][0]
