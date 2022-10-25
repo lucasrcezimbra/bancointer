@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 0.0.6 (2022-10-25)
+- Improve `Inter.__init__`
+- Fix tests
+
+
 ## 0.0.5 (2022-10-24)
 - Add fake classes for testing
 
