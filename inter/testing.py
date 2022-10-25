@@ -85,7 +85,7 @@ class InterFake(Inter):
         >>> inter = InterFake()
         >>>
         >>> operation = Operation(
-        ...     date=date.today(),
+        ...     date=date(2022, 10, 24),
         ...     description='Descrição da Operação',
         ...     title='Pagamento efetuado',
         ...     type=Operation.PIX,
