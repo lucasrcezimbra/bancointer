@@ -9,6 +9,21 @@ class URL:
 
 
 class Client:
+    """
+    Inicializa utilizando as credenciais.
+
+    :param client_id: Client ID
+    :type client_id: str
+
+    :param client_secret: Client Secret
+    :type client_secret: str
+
+    :param cert_path: Caminho do arquivo de certificado
+    :type cert_path: str
+
+    :param key_path: Caminho do arquivo de chave
+    :type key_path: str
+    """
     def __init__(self, client_id, client_secret, cert_path, key_path):
         self.client_id = client_id
         self.client_secret = client_secret
