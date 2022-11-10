@@ -8,27 +8,41 @@ class URL:
     BALANCE = BASE + 'banking/v2/saldo'
 
 
+class Scopes:
+    READ_STATEMENTS = 'extrato.read'
+    "Consulta de saldo e extrato"
+
+    WRITE_PAYMENT = 'pagamento-boleto.write'
+    "Pagamento de boletos"
+
+    all = (READ_STATEMENTS, WRITE_PAYMENT)
+
+
 class Client:
     """
     Inicializa utilizando as credenciais.
 
     :param client_id: Client ID
-    :type client_id: str
+    :type client_id: :class:`str`
 
     :param client_secret: Client Secret
-    :type client_secret: str
+    :type client_secret: :class:`str`
 
     :param cert_path: Caminho do arquivo de certificado
-    :type cert_path: str
+    :type cert_path: :class:`str`
 
     :param key_path: Caminho do arquivo de chave
-    :type key_path: str
+    :type key_path: :class:`str`
+
+    :param scopes: Iterável contendo os :class:`Scopes` necessários
+    :type scopes: :class:`Iterable`
     """
-    def __init__(self, client_id, client_secret, cert_path, key_path):
+    def __init__(self, client_id, client_secret, cert_path, key_path, scopes=None):
         self.client_id = client_id
         self.client_secret = client_secret
         self.cert_path = cert_path
         self.key_path = key_path
+        self.scopes = scopes or Scopes.all
         self._token = None
 
     def _get_token(self):
@@ -37,7 +51,7 @@ class Client:
             data={
                 'client_id': self.client_id,
                 'client_secret': self.client_secret,
-                'scope': 'extrato.read',
+                'scope': ' '.join(self.scopes),
                 'grant_type': 'client_credentials',
             },
             cert=(self.cert_path, self.key_path),

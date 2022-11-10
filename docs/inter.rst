@@ -3,7 +3,7 @@ inter package
 
 
 .. automodule:: inter
-   :members: Inter, Client, Operation
+   :members: Inter, Client, Operation, Scopes
    :undoc-members:
    :show-inheritance:
 

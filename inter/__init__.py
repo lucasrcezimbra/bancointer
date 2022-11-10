@@ -1,4 +1,4 @@
-from inter._client import Client  # noqa
+from inter._client import Client, Scopes  # noqa
 from inter._inter import Inter, Operation  # noqa
 
 __author__ = """Lucas Rangel Cezimbra"""

@@ -4,7 +4,7 @@ import pytest
 import responses
 from responses import matchers
 
-from inter import Client
+from inter import Client, Scopes
 from inter._client import URL
 
 
@@ -25,6 +25,21 @@ def test_init(faker):
     assert client.client_secret == client_secret
     assert client.cert_path == cert_path
     assert client.key_path == key_path
+    assert client.scopes == Scopes.all
+
+
+def test_init_with_scopes(faker):
+    scopes = [Scopes.READ_STATEMENTS]
+
+    client = Client(
+        client_id=faker.pystr(),
+        client_secret=faker.pystr(),
+        cert_path=faker.file_path(),
+        key_path=faker.file_path(),
+        scopes=scopes,
+    )
+
+    assert client.scopes == scopes
 
 
 @responses.activate
@@ -45,7 +60,7 @@ def test_token(client):
                 {
                     'client_id': client.client_id,
                     'client_secret': client.client_secret,
-                    'scope': 'extrato.read',
+                    'scope': 'extrato.read pagamento-boleto.write',
                     'grant_type': 'client_credentials',
                 }
             ),
