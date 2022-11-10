@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 
 
@@ -36,3 +38,13 @@ def statements_data():
 @pytest.fixture
 def balance_data():
     return {'disponivel': 1234.56}
+
+
+@pytest.fixture
+def pay_barcode_data(faker):
+    return {
+        'quantidadeAprovadores': 1,
+        'dataAgendamento': faker.date(),
+        'statusPagamento': 'AGUARDANDO_APROVACAO',
+        'codigoTransacao': str(uuid4()),
+    }

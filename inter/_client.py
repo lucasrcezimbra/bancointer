@@ -6,6 +6,7 @@ class URL:
     AUTH = BASE + 'oauth/v2/token'
     STATEMENTS = BASE + 'banking/v2/extrato'
     BALANCE = BASE + 'banking/v2/saldo'
+    PAYMENTS = BASE + 'banking/v2/pagamento'
 
 
 class Scopes:
@@ -13,7 +14,7 @@ class Scopes:
     "Consulta de saldo e extrato"
 
     WRITE_PAYMENT = 'pagamento-boleto.write'
-    "Pagamento de boletos"
+    "Pagamento de títulos com código de barra"
 
     all = (READ_STATEMENTS, WRITE_PAYMENT)
 
@@ -34,8 +35,9 @@ class Client:
     :param key_path: Caminho do arquivo de chave
     :type key_path: :class:`str`
 
-    :param scopes: Iterável contendo os :class:`Scopes` necessários
-    :type scopes: :class:`Iterable`
+    :param scopes: Iterável contendo os :class:`Scopes` necessários,
+        defaults to :class:`Scopes.all`
+    :type scopes: :class:`Iterable`, optional
     """
     def __init__(self, client_id, client_secret, cert_path, key_path, scopes=None):
         self.client_id = client_id
@@ -88,6 +90,42 @@ class Client:
             params={
                 'dataInicio': start_date.strftime('%Y-%m-%d'),
                 'dataFim': end_date.strftime('%Y-%m-%d'),
+            },
+            headers=self.headers,
+            cert=(self.cert_path, self.key_path),
+        )
+        return response.json()
+
+    def pay_barcode(self, barcode, value, due_date, payment_date=None):
+        """
+        Pagamento imediato ou agendado de títulos com código de barras.
+
+        Necessita do :class:`Scopes.WRITE_PAYMENT`.
+
+        Referência: https://developers.bancointer.com.br/reference/pagarboleto-1
+
+        :param barcode: código de barras (somente números)
+        :type barcode: :class:`str`
+
+        :param value: valor do título
+        :type value: :class:`str`
+
+        :param due_date: data de vencimento
+        :type due_date: :class:`datetime.date`
+
+        :param payment_date: data de pagamento, se não informado, será o mesmo dia.
+        :type payment_date: :class:`datetime.date`, opcional
+
+        :return: resposta da API
+        :rtype: :class:`dict`
+        """
+        response = requests.post(
+            URL.PAYMENTS,
+            json={
+                'codBarraLinhaDigitavel': barcode,
+                'valorPagar': str(value),
+                'dataVencimento': due_date.strftime('%Y-%m-%d'),
+                'dataPagamento': payment_date.strftime('%Y-%m-%d') if payment_date else None,
             },
             headers=self.headers,
             cert=(self.cert_path, self.key_path),
