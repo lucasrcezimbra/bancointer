@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from inter import Inter
 from inter._client import Client
-from inter._inter import Operation
+from inter._inter import Operation, Payment
 from inter.testing import ClientFake
 
 
@@ -50,7 +50,7 @@ def test_get_balance_with_date(faker, mocker, balance_data):
     get_balance_spy.assert_called_once_with(date)
 
 
-def test_get_statement(faker, mocker, statements_data):
+def test_get_statement(faker, mocker):
     client_mock = mocker.MagicMock(spec=Client)
     start_date, end_date = faker.past_date(), faker.past_date()
 
@@ -74,3 +74,30 @@ def test_get_statement_result(faker, mocker):
     assert operation.value == Decimal(data['valor'])
     assert operation.title == data['titulo']
     assert operation.description == data['descricao']
+
+
+def test_pay_barcode_called(faker, mocker, pay_barcode_data):
+    client = ClientFake()
+    pay_barcode_spy = mocker.spy(client, 'pay_barcode')
+
+    barcode, value = '01234', faker.pydecimal()
+    due_date, payment_date = faker.future_date(), faker.future_date()
+
+    Inter(client=client).pay_barcode(barcode, value, due_date, payment_date)
+
+    pay_barcode_spy.assert_called_once_with(barcode, value, due_date, payment_date)
+
+
+def test_pay_barcode_result(faker, mocker):
+    client = ClientFake()
+    data = client.pay_barcode_data
+    barcode, value = '01234', faker.pydecimal()
+    due_date, payment_date = faker.future_date(), faker.future_date()
+
+    payment = Inter(client=client).pay_barcode(barcode, value, due_date, payment_date)
+
+    assert isinstance(payment, Payment)
+    assert payment.approvers_number == data['quantidadeAprovadores']
+    assert payment.scheduled_date == datetime.strptime(data['dataAgendamento'], '%Y-%m-%d').date()
+    assert payment.status == data['statusPagamento']
+    assert payment.transaction_id == data['codigoTransacao']
