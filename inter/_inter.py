@@ -65,6 +65,30 @@ class Inter:
         data = self._client.get_statements(start_date, end_date)['transacoes']
         return [Operation.from_data(d) for d in data]
 
+    def pay_barcode(self, barcode, value, due_date, payment_date=None):
+        """
+        Pagamento imediato ou agendado de títulos com código de barras.
+
+        Necessita do :class:`Scopes.WRITE_PAYMENT`.
+
+        :param barcode: código de barras (somente números)
+        :type barcode: :class:`str`
+
+        :param value: valor do título
+        :type value: :class:`str`
+
+        :param due_date: data de vencimento
+        :type due_date: :class:`datetime.date`
+
+        :param payment_date: data de pagamento, se não informado, será o mesmo dia.
+        :type payment_date: :class:`datetime.date`, opcional
+
+        :return: Retorno do pagamento
+        :rtype: :class:`Payment`
+        """
+        data = self._client.pay_barcode(barcode, value, due_date, payment_date)
+        return Payment.from_data(data)
+
 
 @define
 class Operation:
