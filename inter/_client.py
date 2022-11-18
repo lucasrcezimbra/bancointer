@@ -102,7 +102,7 @@ class Client:
 
         Necessita do :class:`Scopes.WRITE_PAYMENT`.
 
-        Referência: https://developers.bancointer.com.br/reference/pagarboleto-1
+        Referência: https://developers.bancointer.com.br/reference/pagarboleto
 
         :param barcode: código de barras (somente números)
         :type barcode: :class:`str`
