@@ -1,17 +1,19 @@
-inter package
-=============
+Low-level API
+==============
 
+API
+---
 
 .. automodule:: inter
-   :members: Inter, Client, Operation, Scopes
+   :members: Client, Scopes
    :undoc-members:
    :show-inheritance:
 
 
 Testing
---------------------
+-------
 
 .. automodule:: inter.testing
-   :members:
+   :members: ClientFake
    :undoc-members:
    :show-inheritance:
