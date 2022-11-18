@@ -111,3 +111,43 @@ class Operation:
             type=data['tipoTransacao'],
             value=value,
         )
+
+
+@define
+class Payment:
+    DONE = 'REALIZADO'
+    SCHEDULED = 'AGENDADO'
+    WAITING_APPROVAL = 'AGUARDANDO_APROVACAO'
+    APPROVED = 'APROVADO'
+    SCHEDULED_DONE = 'AGENDADO_REALIZADO'
+    STATUSES = (DONE, SCHEDULED, WAITING_APPROVAL, APPROVED, SCHEDULED_DONE)
+
+    approvers_number: int
+    "Quantidade de Aprovadores necessários"
+
+    scheduled_date: date
+    "Data agendada para finalizar pagamento"
+
+    status: str
+    "Status do Pagamento. Examplo :attr:`DONE`, :attr:`SCHEDULED`, etc."
+
+    transaction_id: str
+    "Código da Transação"
+
+    @classmethod
+    def from_data(cls, data):
+        """
+        Transforma dados retornados da API em um objeto :class:`Payment`.
+
+        :param data: dicionário com dados de um pagamento
+        :type data: `dict`
+
+        :return: Resultado do pagamento
+        :rtype: :class:`Payment`
+        """
+        return cls(
+            approvers_number=int(data['quantidadeAprovadores']),
+            scheduled_date=datetime.strptime(data['dataAgendamento'], '%Y-%m-%d').date(),
+            status=data['statusPagamento'],
+            transaction_id=data['codigoTransacao'],
+        )
