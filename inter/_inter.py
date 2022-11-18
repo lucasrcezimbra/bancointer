@@ -65,6 +65,30 @@ class Inter:
         data = self._client.get_statements(start_date, end_date)['transacoes']
         return [Operation.from_data(d) for d in data]
 
+    def pay_barcode(self, barcode, value, due_date, payment_date=None):
+        """
+        Pagamento imediato ou agendado de títulos com código de barras.
+
+        Necessita do :class:`Scopes.WRITE_PAYMENT`.
+
+        :param barcode: código de barras (somente números)
+        :type barcode: :class:`str`
+
+        :param value: valor do título
+        :type value: :class:`str`
+
+        :param due_date: data de vencimento
+        :type due_date: :class:`datetime.date`
+
+        :param payment_date: data de pagamento, se não informado, será o mesmo dia.
+        :type payment_date: :class:`datetime.date`, opcional
+
+        :return: Retorno do pagamento
+        :rtype: :class:`Payment`
+        """
+        data = self._client.pay_barcode(barcode, value, due_date, payment_date)
+        return Payment.from_data(data)
+
 
 @define
 class Operation:
@@ -110,4 +134,44 @@ class Operation:
             title=data['titulo'],
             type=data['tipoTransacao'],
             value=value,
+        )
+
+
+@define
+class Payment:
+    DONE = 'REALIZADO'
+    SCHEDULED = 'AGENDADO'
+    WAITING_APPROVAL = 'AGUARDANDO_APROVACAO'
+    APPROVED = 'APROVADO'
+    SCHEDULED_DONE = 'AGENDADO_REALIZADO'
+    STATUSES = (DONE, SCHEDULED, WAITING_APPROVAL, APPROVED, SCHEDULED_DONE)
+
+    approvers_number: int
+    "Quantidade de Aprovadores necessários"
+
+    scheduled_date: date
+    "Data agendada para finalizar pagamento"
+
+    status: str
+    "Status do Pagamento. Examplo :attr:`DONE`, :attr:`SCHEDULED`, etc."
+
+    transaction_id: str
+    "Código da Transação"
+
+    @classmethod
+    def from_data(cls, data):
+        """
+        Transforma dados retornados da API em um objeto :class:`Payment`.
+
+        :param data: dicionário com dados de um pagamento
+        :type data: `dict`
+
+        :return: Resultado do pagamento
+        :rtype: :class:`Payment`
+        """
+        return cls(
+            approvers_number=int(data['quantidadeAprovadores']),
+            scheduled_date=datetime.strptime(data['dataAgendamento'], '%Y-%m-%d').date(),
+            status=data['statusPagamento'],
+            transaction_id=data['codigoTransacao'],
         )
