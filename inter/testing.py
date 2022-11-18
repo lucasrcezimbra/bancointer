@@ -1,4 +1,5 @@
 import random
+from uuid import uuid4
 
 from faker import Faker
 
@@ -23,6 +24,12 @@ class ClientFake(Client):
         self.balance = {'disponivel': faker.pyfloat(right_digits=2)}
         self.statements = {
             'transacoes': [generate_operation_data(), generate_operation_data()]
+        }
+        self.pay_barcode_data = {
+            'quantidadeAprovadores': faker.pyint(),
+            'dataAgendamento': faker.date(),
+            'statusPagamento': 'AGUARDANDO_APROVACAO',
+            'codigoTransacao': str(uuid4()),
         }
 
     def get_balance(self, date=None):
@@ -52,6 +59,21 @@ class ClientFake(Client):
         {'statements': 'custom'}
         """
         return self.statements
+
+    def pay_barcode(self, barcode, value, due_date, payment_date=None):
+        """
+        Retorna dados fakes simulando a resposta do endpoint real.
+        Sobreescreva `client.pay_barcode_data` para customizar o retorno.
+
+        >>> from datetime import date
+        >>>
+        >>> client = ClientFake()
+        >>>
+        >>> client.pay_barcode_data = {'custom': True}
+        >>> client.pay_barcode('0123...', '1.99', date.today(), payment_date=date.today())
+        {'custom': True}
+        """
+        return self.pay_barcode_data
 
 
 class InterFake(Inter):
