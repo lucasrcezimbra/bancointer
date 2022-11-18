@@ -3,7 +3,7 @@ from uuid import uuid4
 
 from faker import Faker
 
-from inter import Client, Inter, Operation
+from inter import Client, Inter, Operation, Payment
 
 faker = Faker()
 
@@ -78,7 +78,9 @@ class ClientFake(Client):
 
 class InterFake(Inter):
     def __init__(self, *args, **kwargs):
+        client = ClientFake()
         self.balance = faker.pydecimal(right_digits=2)
+        self.pay_barcode_data = Payment.from_data(client.pay_barcode_data)
 
     def get_balance(self, date=None):
         """
@@ -123,3 +125,31 @@ class InterFake(Inter):
                    value=Decimal('123.45'))]
         """
         return self.statement
+
+    def pay_barcode(self, barcode, value, due_date, payment_date=None):
+        """
+        Retorna dados fakes simulando a resposta do client real.
+        Sobreescreva `InterFake.pay_barcode_data` para customizar o retorno.
+
+        >>> from datetime import date
+        >>> from uuid import uuid4
+        >>> from inter import Payment
+        >>>
+        >>> inter = InterFake()
+        >>>
+        >>> payment = Payment(
+        ...     approvers_number=1,
+        ...     scheduled_date=date(2022, 11, 18),
+        ...     status=Payment.DONE,
+        ...     transaction_id='tr4ns4ct10n_1d'
+        ... )
+        >>>
+        >>> inter.pay_barcode_data = payment
+        >>> inter.pay_barcode('', '1.99', date.today(), date.today())
+        ... # doctest: +NORMALIZE_WHITESPACE
+        Payment(approvers_number=1,
+                scheduled_date=datetime.date(2022, 11, 18),
+                status='REALIZADO',
+                transaction_id='tr4ns4ct10n_1d')
+        """
+        return self.pay_barcode_data
