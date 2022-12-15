@@ -148,8 +148,8 @@ class InterFake(Inter):
         >>> inter.pay_barcode('', '1.99', date.today(), date.today())
         ... # doctest: +NORMALIZE_WHITESPACE
         Payment(approvers_number=1,
-                scheduled_date=datetime.date(2022, 11, 18),
                 status='REALIZADO',
-                transaction_id='tr4ns4ct10n_1d')
+                transaction_id='tr4ns4ct10n_1d',
+                scheduled_date=datetime.date(2022, 11, 18))
         """
         return self.pay_barcode_data
