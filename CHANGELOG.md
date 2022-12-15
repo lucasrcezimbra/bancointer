@@ -1,6 +1,10 @@
 # Changelog
 
 
+## 0.0.8 (2022-12-14)
+- Fix barcode payment
+
+
 ## 0.0.7 (2022-11-18)
 - Add barcode payment [#14](https://github.com/lucasrcezimbra/bancointer/issues/14)
   * `Inter.pay_barcode` and `Client.pay_barcode`

@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from decimal import Decimal
+from typing import Optional
 
 from attrs import define
 
@@ -149,14 +150,14 @@ class Payment:
     approvers_number: int
     "Quantidade de Aprovadores necessários"
 
-    scheduled_date: date
-    "Data agendada para finalizar pagamento"
-
     status: str
     "Status do Pagamento. Examplo :attr:`DONE`, :attr:`SCHEDULED`, etc."
 
     transaction_id: str
     "Código da Transação"
+
+    scheduled_date: Optional[date] = None
+    "Data agendada para finalizar pagamento"
 
     @classmethod
     def from_data(cls, data):
@@ -169,9 +170,14 @@ class Payment:
         :return: Resultado do pagamento
         :rtype: :class:`Payment`
         """
+        scheduled_date = (
+            datetime.strptime(data['dataAgendamento'], '%Y-%m-%d').date()
+            if data.get('dataAgendamento')
+            else None
+        )
         return cls(
             approvers_number=int(data['quantidadeAprovadores']),
-            scheduled_date=datetime.strptime(data['dataAgendamento'], '%Y-%m-%d').date(),
+            scheduled_date=scheduled_date,
             status=data['statusPagamento'],
             transaction_id=data['codigoTransacao'],
         )
