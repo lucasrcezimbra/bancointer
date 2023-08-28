@@ -1,6 +1,11 @@
 # Changelog
 
 
+## 0.0.9 (2023-08-28)
+- Unpin dependencies
+- Fix pre-commit hooks
+
+
 ## 0.0.8 (2022-12-14)
 - Fix barcode payment
 
