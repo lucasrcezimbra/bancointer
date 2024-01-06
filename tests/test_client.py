@@ -10,9 +10,15 @@ from inter._client import URL
 
 @pytest.fixture
 def client(faker):
-    client_id, client_secret = faker.pystr(), faker.pystr()
+    client_id, client_secret, account_number = (
+        faker.pystr(),
+        faker.pystr(),
+        faker.random_int(),
+    )
     cert_path, key_path = faker.file_path(), faker.file_path()
-    return Client(client_id, client_secret, cert_path, key_path)
+    return Client(
+        client_id, client_secret, cert_path, key_path, account_number=account_number
+    )
 
 
 def test_init(faker):
@@ -83,8 +89,12 @@ def test_headers(client):
     token = str(uuid4())
 
     client._token = token
+    client.account_number = "12321"
 
-    assert client.headers == {"Authorization": f"Bearer {client.token}"}
+    assert client.headers == {
+        "Authorization": f"Bearer {client.token}",
+        "x-conta-corrente": "12321",
+    }
 
 
 @responses.activate

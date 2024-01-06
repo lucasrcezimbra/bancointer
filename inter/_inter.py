@@ -27,6 +27,7 @@ class Inter:
         passar um :class:`Client` já inicializado. Útil para testes.
     :type client: Client
     """
+
     def __init__(
         self,
         *,
@@ -34,10 +35,13 @@ class Inter:
         client_secret=None,
         cert_path=None,
         key_path=None,
-        client=None
+        client=None,
+        account_number=None,
     ):
         assert client or (client_id and client_secret and cert_path and key_path)
-        self._client = client or Client(client_id, client_secret, cert_path, key_path)
+        self._client = client or Client(
+            client_id, client_secret, cert_path, key_path, account_number=account_number
+        )
 
     def get_balance(self, date=None):
         """
