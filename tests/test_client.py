@@ -84,9 +84,7 @@ def test_headers(client):
 
     client._token = token
 
-    assert client.headers == {
-        "Authorization": f"Bearer {client.token}",
-    }
+    assert client.headers == {"Authorization": f"Bearer {client.token}"}
 
 
 def test_headers_account_number(client):
