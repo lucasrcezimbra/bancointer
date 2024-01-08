@@ -10,15 +10,9 @@ from inter._client import URL
 
 @pytest.fixture
 def client(faker):
-    client_id, client_secret, account_number = (
-        faker.pystr(),
-        faker.pystr(),
-        faker.random_int(),
-    )
+    client_id, client_secret = faker.pystr(), faker.pystr()
     cert_path, key_path = faker.file_path(), faker.file_path()
-    return Client(
-        client_id, client_secret, cert_path, key_path, account_number=account_number
-    )
+    return Client(client_id, client_secret, cert_path, key_path)
 
 
 def test_init(faker):
