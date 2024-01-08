@@ -39,7 +39,9 @@ class Client:
         defaults to :class:`Scopes.all`
     :type scopes: :class:`Iterable`, optional
     """
-    def __init__(self, client_id, client_secret, cert_path, key_path, account_number=None, scopes=None):
+    def __init__(
+        self, client_id, client_secret, cert_path, key_path, account_number=None, scopes=None
+    ):
         self.client_id = client_id
         self.client_secret = client_secret
         self.cert_path = cert_path
