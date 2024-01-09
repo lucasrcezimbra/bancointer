@@ -1,6 +1,6 @@
 [project]
 name="bancointer"
-version = "0.0.9"
+version = "0.1.0"
 description = "Client to consume Banco Inter APIs"
 readme = "README.md"
 requires-python = ">=3.7"
