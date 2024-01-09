@@ -87,6 +87,18 @@ def test_headers(client):
     assert client.headers == {"Authorization": f"Bearer {client.token}"}
 
 
+def test_headers_account_number(client):
+    token = str(uuid4())
+
+    client._token = token
+    client.account_number = "12321"
+
+    assert client.headers == {
+        "Authorization": f"Bearer {client.token}",
+        "x-conta-corrente": "12321",
+    }
+
+
 @responses.activate
 def test_get_statements(faker, client, statements_data):
     client._token = uuid4()

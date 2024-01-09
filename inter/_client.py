@@ -39,11 +39,14 @@ class Client:
         defaults to :class:`Scopes.all`
     :type scopes: :class:`Iterable`, optional
     """
-    def __init__(self, client_id, client_secret, cert_path, key_path, scopes=None):
+    def __init__(
+        self, client_id, client_secret, cert_path, key_path, account_number=None, scopes=None
+    ):
         self.client_id = client_id
         self.client_secret = client_secret
         self.cert_path = cert_path
         self.key_path = key_path
+        self.account_number = account_number
         self.scopes = scopes or Scopes.all
         self._token = None
 
@@ -68,7 +71,11 @@ class Client:
 
     @property
     def headers(self):
-        return {"Authorization": f"Bearer {self.token}"}
+        headers = {"Authorization": f"Bearer {self.token}"}
+        if self.account_number:
+            headers["x-conta-corrente"] = self.account_number
+
+        return headers
 
     def get_balance(self, date=None):
         params = {}

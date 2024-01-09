@@ -21,6 +21,7 @@ def test_init_from_credentials(faker, mocker):
     cert_path, key_path = faker.file_path(), faker.file_path()
 
     inter = Inter(
+        account_number='123456',
         client_id=client_id,
         client_secret=client_secret,
         cert_path=cert_path,
@@ -28,7 +29,7 @@ def test_init_from_credentials(faker, mocker):
     )
 
     assert isinstance(inter._client, Client)
-    client_mock.assert_called_once_with(client_id, client_secret, cert_path, key_path)
+    client_mock.assert_called_once_with(client_id, client_secret, cert_path, key_path, '123456')
 
 
 def test_get_balance(faker, mocker):
