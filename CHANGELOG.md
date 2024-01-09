@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.0 (2023-01-09)
+- Add support to multiple accounts through the x-conta-corrente header [#26](https://github.com/lucasrcezimbra/bancointer/pull/26). Thanks @jeanwainer
+
 
 ## 0.0.9 (2023-08-28)
 - Unpin dependencies
