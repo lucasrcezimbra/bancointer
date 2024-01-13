@@ -53,7 +53,7 @@ class Inter:
         :return: saldo disponível
         :rtype: :class:`decimal.Decimal`
         """
-        return Decimal(str(self._client.get_balance(date)['disponivel']))
+        return Decimal(str(self._client.get_balance(date)["disponivel"]))
 
     def get_statement(self, start_date, end_date):
         """
@@ -67,7 +67,7 @@ class Inter:
         :return: lista de operações do periodo
         :rtype: List[:class:`Operation`]
         """
-        data = self._client.get_statements(start_date, end_date)['transacoes']
+        data = self._client.get_statements(start_date, end_date)["transacoes"]
         return [Operation.from_data(d) for d in data]
 
     def pay_barcode(self, barcode, value, due_date, payment_date=None):
@@ -97,12 +97,12 @@ class Inter:
 
 @define
 class Operation:
-    PAYMENT = 'PAGAMENTO'
-    PIX = 'PIX'
+    PAYMENT = "PAGAMENTO"
+    PIX = "PIX"
     TYPES = (PAYMENT, PIX)
 
-    CREDIT = 'C'
-    DEBIT = 'D'
+    CREDIT = "C"
+    DEBIT = "D"
 
     date: date
     "Data da operação"
@@ -130,25 +130,25 @@ class Operation:
         :return: Operação
         :rtype: :class:`Operation`
         """
-        value = Decimal(str(data['valor']))
-        value = (value * -1) if data['tipoOperacao'] == cls.DEBIT else value
+        value = Decimal(str(data["valor"]))
+        value = (value * -1) if data["tipoOperacao"] == cls.DEBIT else value
 
         return cls(
-            date=datetime.strptime(data['dataEntrada'], '%Y-%m-%d').date(),
-            description=data['descricao'],
-            title=data['titulo'],
-            type=data['tipoTransacao'],
+            date=datetime.strptime(data["dataEntrada"], "%Y-%m-%d").date(),
+            description=data["descricao"],
+            title=data["titulo"],
+            type=data["tipoTransacao"],
             value=value,
         )
 
 
 @define
 class Payment:
-    DONE = 'REALIZADO'
-    SCHEDULED = 'AGENDADO'
-    WAITING_APPROVAL = 'AGUARDANDO_APROVACAO'
-    APPROVED = 'APROVADO'
-    SCHEDULED_DONE = 'AGENDADO_REALIZADO'
+    DONE = "REALIZADO"
+    SCHEDULED = "AGENDADO"
+    WAITING_APPROVAL = "AGUARDANDO_APROVACAO"
+    APPROVED = "APROVADO"
+    SCHEDULED_DONE = "AGENDADO_REALIZADO"
     STATUSES = (DONE, SCHEDULED, WAITING_APPROVAL, APPROVED, SCHEDULED_DONE)
 
     approvers_number: int
@@ -175,13 +175,13 @@ class Payment:
         :rtype: :class:`Payment`
         """
         scheduled_date = (
-            datetime.strptime(data['dataAgendamento'], '%Y-%m-%d').date()
-            if data.get('dataAgendamento')
+            datetime.strptime(data["dataAgendamento"], "%Y-%m-%d").date()
+            if data.get("dataAgendamento")
             else None
         )
         return cls(
-            approvers_number=int(data['quantidadeAprovadores']),
+            approvers_number=int(data["quantidadeAprovadores"]),
             scheduled_date=scheduled_date,
-            status=data['statusPagamento'],
-            transaction_id=data['codigoTransacao'],
+            status=data["statusPagamento"],
+            transaction_id=data["codigoTransacao"],
         )

@@ -58,13 +58,15 @@ def test_token(client):
         match=[
             matchers.urlencoded_params_matcher(
                 {
-                    'client_id': client.client_id,
-                    'client_secret': client.client_secret,
-                    'scope': 'extrato.read pagamento-boleto.write',
-                    'grant_type': 'client_credentials',
+                    "client_id": client.client_id,
+                    "client_secret": client.client_secret,
+                    "scope": "extrato.read pagamento-boleto.write",
+                    "grant_type": "client_credentials",
                 }
             ),
-            matchers.request_kwargs_matcher({'cert': (client.cert_path, client.key_path)})
+            matchers.request_kwargs_matcher(
+                {"cert": (client.cert_path, client.key_path)}
+            ),
         ],
     )
 
@@ -111,12 +113,14 @@ def test_get_statements(faker, client, statements_data):
         match=[
             matchers.query_param_matcher(
                 {
-                    'dataInicio': start.strftime('%Y-%m-%d'),
-                    'dataFim': end.strftime('%Y-%m-%d'),
+                    "dataInicio": start.strftime("%Y-%m-%d"),
+                    "dataFim": end.strftime("%Y-%m-%d"),
                 }
             ),
             matchers.header_matcher(client.headers),
-            matchers.request_kwargs_matcher({'cert': (client.cert_path, client.key_path)})
+            matchers.request_kwargs_matcher(
+                {"cert": (client.cert_path, client.key_path)}
+            ),
         ],
     )
 
@@ -133,7 +137,9 @@ def test_get_balance(faker, client, balance_data):
         status=200,
         match=[
             matchers.header_matcher(client.headers),
-            matchers.request_kwargs_matcher({'cert': (client.cert_path, client.key_path)})
+            matchers.request_kwargs_matcher(
+                {"cert": (client.cert_path, client.key_path)}
+            ),
         ],
     )
 
@@ -150,9 +156,11 @@ def test_get_balance_with_date(faker, client, balance_data):
         json=balance_data,
         status=200,
         match=[
-            matchers.query_param_matcher({'dataSaldo': date.strftime('%Y-%m-%d')}),
+            matchers.query_param_matcher({"dataSaldo": date.strftime("%Y-%m-%d")}),
             matchers.header_matcher(client.headers),
-            matchers.request_kwargs_matcher({'cert': (client.cert_path, client.key_path)})
+            matchers.request_kwargs_matcher(
+                {"cert": (client.cert_path, client.key_path)}
+            ),
         ],
     )
 
@@ -162,21 +170,25 @@ def test_get_balance_with_date(faker, client, balance_data):
 @responses.activate
 def test_pay_barcode(faker, client, pay_barcode_data):
     client._token = uuid4()
-    barcode, value, due_date = '01234', faker.pydecimal(), faker.future_date()
+    barcode, value, due_date = "01234", faker.pydecimal(), faker.future_date()
 
     responses.post(
         URL.PAYMENTS,
         json=pay_barcode_data,
         status=200,
         match=[
-            matchers.json_params_matcher({
-                'codBarraLinhaDigitavel': barcode,
-                'valorPagar': str(value),
-                'dataVencimento': due_date.strftime('%Y-%m-%d'),
-                'dataPagamento': None,
-            }),
+            matchers.json_params_matcher(
+                {
+                    "codBarraLinhaDigitavel": barcode,
+                    "valorPagar": str(value),
+                    "dataVencimento": due_date.strftime("%Y-%m-%d"),
+                    "dataPagamento": None,
+                }
+            ),
             matchers.header_matcher(client.headers),
-            matchers.request_kwargs_matcher({'cert': (client.cert_path, client.key_path)})
+            matchers.request_kwargs_matcher(
+                {"cert": (client.cert_path, client.key_path)}
+            ),
         ],
     )
 
@@ -186,7 +198,7 @@ def test_pay_barcode(faker, client, pay_barcode_data):
 @responses.activate
 def test_pay_barcode_future(faker, client, pay_barcode_data):
     client._token = uuid4()
-    barcode, value = '01234', faker.pydecimal()
+    barcode, value = "01234", faker.pydecimal()
     due_date, payment_date = faker.future_date(), faker.future_date()
 
     responses.post(
@@ -194,15 +206,21 @@ def test_pay_barcode_future(faker, client, pay_barcode_data):
         json=pay_barcode_data,
         status=200,
         match=[
-            matchers.json_params_matcher({
-                'codBarraLinhaDigitavel': barcode,
-                'valorPagar': str(value),
-                'dataVencimento': due_date.strftime('%Y-%m-%d'),
-                'dataPagamento': payment_date.strftime('%Y-%m-%d'),
-            }),
+            matchers.json_params_matcher(
+                {
+                    "codBarraLinhaDigitavel": barcode,
+                    "valorPagar": str(value),
+                    "dataVencimento": due_date.strftime("%Y-%m-%d"),
+                    "dataPagamento": payment_date.strftime("%Y-%m-%d"),
+                }
+            ),
             matchers.header_matcher(client.headers),
-            matchers.request_kwargs_matcher({'cert': (client.cert_path, client.key_path)})
+            matchers.request_kwargs_matcher(
+                {"cert": (client.cert_path, client.key_path)}
+            ),
         ],
     )
 
-    assert client.pay_barcode(barcode, value, due_date, payment_date) == pay_barcode_data
+    assert (
+        client.pay_barcode(barcode, value, due_date, payment_date) == pay_barcode_data
+    )
