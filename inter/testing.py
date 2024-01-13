@@ -10,26 +10,26 @@ faker = Faker()
 
 def generate_operation_data():
     return {
-        'dataEntrada': faker.date(),
-        'tipoTransacao': random.choice(Operation.TYPES),
-        'tipoOperacao': random.choice(('C', 'D')),
-        'valor': str(faker.pyfloat(right_digits=2, positive=True)),
-        'titulo': faker.sentence(),
-        'descricao': faker.sentence(),
+        "dataEntrada": faker.date(),
+        "tipoTransacao": random.choice(Operation.TYPES),
+        "tipoOperacao": random.choice(("C", "D")),
+        "valor": str(faker.pyfloat(right_digits=2, positive=True)),
+        "titulo": faker.sentence(),
+        "descricao": faker.sentence(),
     }
 
 
 class ClientFake(Client):
     def __init__(self, *args, **kwargs):
-        self.balance = {'disponivel': faker.pyfloat(right_digits=2)}
+        self.balance = {"disponivel": faker.pyfloat(right_digits=2)}
         self.statements = {
-            'transacoes': [generate_operation_data(), generate_operation_data()]
+            "transacoes": [generate_operation_data(), generate_operation_data()]
         }
         self.pay_barcode_data = {
-            'quantidadeAprovadores': faker.pyint(),
-            'dataAgendamento': faker.date(),
-            'statusPagamento': 'AGUARDANDO_APROVACAO',
-            'codigoTransacao': str(uuid4()),
+            "quantidadeAprovadores": faker.pyint(),
+            "dataAgendamento": faker.date(),
+            "statusPagamento": "AGUARDANDO_APROVACAO",
+            "codigoTransacao": str(uuid4()),
         }
 
     def get_balance(self, date=None):

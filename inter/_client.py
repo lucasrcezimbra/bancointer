@@ -2,18 +2,18 @@ import requests
 
 
 class URL:
-    BASE = 'https://cdpj.partners.bancointer.com.br/'
-    AUTH = BASE + 'oauth/v2/token'
-    STATEMENTS = BASE + 'banking/v2/extrato'
-    BALANCE = BASE + 'banking/v2/saldo'
-    PAYMENTS = BASE + 'banking/v2/pagamento'
+    BASE = "https://cdpj.partners.bancointer.com.br/"
+    AUTH = BASE + "oauth/v2/token"
+    STATEMENTS = BASE + "banking/v2/extrato"
+    BALANCE = BASE + "banking/v2/saldo"
+    PAYMENTS = BASE + "banking/v2/pagamento"
 
 
 class Scopes:
-    READ_STATEMENTS = 'extrato.read'
+    READ_STATEMENTS = "extrato.read"
     "Consulta de saldo e extrato"
 
-    WRITE_PAYMENT = 'pagamento-boleto.write'
+    WRITE_PAYMENT = "pagamento-boleto.write"
     "Pagamento de títulos com código de barra"
 
     all = (READ_STATEMENTS, WRITE_PAYMENT)
@@ -39,8 +39,15 @@ class Client:
         defaults to :class:`Scopes.all`
     :type scopes: :class:`Iterable`, optional
     """
+
     def __init__(
-        self, client_id, client_secret, cert_path, key_path, account_number=None, scopes=None
+        self,
+        client_id,
+        client_secret,
+        cert_path,
+        key_path,
+        account_number=None,
+        scopes=None,
     ):
         self.client_id = client_id
         self.client_secret = client_secret
@@ -54,14 +61,14 @@ class Client:
         response = requests.post(
             URL.AUTH,
             data={
-                'client_id': self.client_id,
-                'client_secret': self.client_secret,
-                'scope': ' '.join(self.scopes),
-                'grant_type': 'client_credentials',
+                "client_id": self.client_id,
+                "client_secret": self.client_secret,
+                "scope": " ".join(self.scopes),
+                "grant_type": "client_credentials",
             },
             cert=(self.cert_path, self.key_path),
         )
-        return response.json()['access_token']
+        return response.json()["access_token"]
 
     @property
     def token(self):
@@ -81,7 +88,7 @@ class Client:
         params = {}
 
         if date:
-            params['dataSaldo'] = date.strftime('%Y-%m-%d')
+            params["dataSaldo"] = date.strftime("%Y-%m-%d")
 
         response = requests.get(
             URL.BALANCE,
@@ -95,8 +102,8 @@ class Client:
         response = requests.get(
             URL.STATEMENTS,
             params={
-                'dataInicio': start_date.strftime('%Y-%m-%d'),
-                'dataFim': end_date.strftime('%Y-%m-%d'),
+                "dataInicio": start_date.strftime("%Y-%m-%d"),
+                "dataFim": end_date.strftime("%Y-%m-%d"),
             },
             headers=self.headers,
             cert=(self.cert_path, self.key_path),
@@ -129,10 +136,12 @@ class Client:
         response = requests.post(
             URL.PAYMENTS,
             json={
-                'codBarraLinhaDigitavel': barcode,
-                'valorPagar': str(value),
-                'dataVencimento': due_date.strftime('%Y-%m-%d'),
-                'dataPagamento': payment_date.strftime('%Y-%m-%d') if payment_date else None,
+                "codBarraLinhaDigitavel": barcode,
+                "valorPagar": str(value),
+                "dataVencimento": due_date.strftime("%Y-%m-%d"),
+                "dataPagamento": payment_date.strftime("%Y-%m-%d")
+                if payment_date
+                else None,
             },
             headers=self.headers,
             cert=(self.cert_path, self.key_path),
