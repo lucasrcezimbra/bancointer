@@ -139,9 +139,9 @@ class Client:
                 "codBarraLinhaDigitavel": barcode,
                 "valorPagar": str(value),
                 "dataVencimento": due_date.strftime("%Y-%m-%d"),
-                "dataPagamento": payment_date.strftime("%Y-%m-%d")
-                if payment_date
-                else None,
+                "dataPagamento": (
+                    payment_date.strftime("%Y-%m-%d") if payment_date else None
+                ),
             },
             headers=self.headers,
             cert=(self.cert_path, self.key_path),
