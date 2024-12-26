@@ -42,7 +42,7 @@ docs = [
 ]
 test = [
   "bump2version==1.0.1",
-  "coverage==6.4.4",
+  "coverage==7.6.9",
   "coveralls==3.3.1",
   "faker==33.1.0",
   "pre-commit==4.0.1",
