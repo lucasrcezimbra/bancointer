@@ -44,6 +44,7 @@ test = [
   "bump2version==1.0.1",
   "coverage==6.4.4",
   "coveralls==3.3.1",
+  "codecov==2.1.13",
   "faker==37.3.0",
   "pre-commit==4.2.0",
   "pytest==8.3.5",

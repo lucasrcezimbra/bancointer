@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Switch from Coveralls to Codecov for coverage reporting [#23](https://github.com/lucasrcezimbra/bancointer/issues/23)
+
 ## 0.1.0 (2023-01-09)
 - Add support to multiple accounts through the x-conta-corrente header [#26](https://github.com/lucasrcezimbra/bancointer/pull/26). Thanks @jeanwainer
 

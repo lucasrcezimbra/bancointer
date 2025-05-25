@@ -2,7 +2,7 @@
 
 
 [![PyPI](https://img.shields.io/pypi/v/bancointer.svg)](https://pypi.python.org/pypi/bancointer)
-[![Coverage Status](https://coveralls.io/repos/github/lucasrcezimbra/bancointer/badge.svg?branch=master)](https://coveralls.io/github/lucasrcezimbra/bancointer?branch=master)
+[![codecov](https://codecov.io/gh/lucasrcezimbra/bancointer/branch/master/graph/badge.svg)](https://codecov.io/gh/lucasrcezimbra/bancointer)
 [![Documentation Status](https://readthedocs.org/projects/bancointer/badge/?version=latest)](https://bancointer.readthedocs.io/en/latest/?version=latest)
 
 Client to consume Banco Inter APIs
