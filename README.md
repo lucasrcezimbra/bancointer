@@ -102,7 +102,8 @@ cd bancointer
 git checkout develop
 python -m venv .venv
 source .venv/bin/activate
-pip install .[test]
+pip install poetry
+poetry install
 pre-commit install
 pytest
 ```

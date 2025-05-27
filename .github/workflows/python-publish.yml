@@ -9,27 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - run: pipx install poetry
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install --upgrade ".[test]"
-          pre-commit install
-      - name: Run pre-commit
-        run: pre-commit run -a
-      - name: Test with pytest
-        run: pytest --cov=inter
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
+          python-version: '3.12'
+          cache: 'poetry'
+      - run: make install
+      - run: make lint
+      - run: make coverage
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
         with:
-          fail_ci_if_error: false
-      - name: Install build dependencies
-        run: python -m pip install --upgrade build
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: Build package
-        run: python -m build
+        run: poetry build
       - name: Publish package
         uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc
         with:

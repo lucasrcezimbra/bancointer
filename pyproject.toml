@@ -1,14 +1,11 @@
-[project]
-name="bancointer"
+[tool.poetry]
+name = "bancointer"
 version = "0.1.1"
 description = "Client to consume Banco Inter APIs"
 readme = "README.md"
-requires-python = ">=3.7"
-license = {file = "LICENSE"}
+license = "LGPL-2.0-only"
 keywords = ["bancointer"]
-authors = [
-  {name="Lucas Rangel Cezimbra", email="lucas@cezimbra.tec.br"},
-]
+authors = ["Lucas Rangel Cezimbra <lucas@cezimbra.tec.br>"]
 classifiers = [
   'Development Status :: 2 - Pre-Alpha',
   'Intended Audience :: Developers',
@@ -20,49 +17,39 @@ classifiers = [
   'Programming Language :: Python :: 3.9',
   'Programming Language :: Python :: 3.10',
 ]
-dependencies = [
-  "attrs",
-  "requests",
+packages = [
+  {include = "inter"}
 ]
 
-[project.urls]
+[tool.poetry.urls]
 homepage = "https://github.com/lucasrcezimbra/bancointer"
 documentation = "https://bancointer.readthedocs.io/"
 repository = "https://github.com/lucasrcezimbra/bancointer"
 changelog = "https://github.com/lucasrcezimbra/bancointer/blob/main/CHANGELOG.md"
 
-[project.optional-dependencies]
-build = [
-  "flit>=3.4"
-]
-docs = [
-  "myst-parser==4.0.1",
-  "Sphinx==8.2.3",
-  "sphinx-rtd-theme==3.0.2",
-]
-test = [
-  "bump2version==1.0.1",
-  "coverage==6.4.4",
-  "coveralls==3.3.1",
-  "codecov==2.1.13",
-  "faker==37.3.0",
-  "pre-commit==4.2.0",
-  "pytest==8.3.5",
-  "pytest-cov==4.1.0",
-  "pytest-mock==3.14.0",
-  "responses==0.25.7",
-]
+[tool.poetry.dependencies]
+python = ">=3.7"
+attrs = "*"
+requests = "*"
+
+[tool.poetry.group.dev.dependencies]
+bump2version = "^1.0.1"
+codecov = "^2.1.13"
+faker = "^37.3.0"
+pre-commit = "^4.2.0"
+pytest = "^8.3.5"
+pytest-cov = "^4.1.0"
+pytest-mock = "^3.14.0"
+responses = "^0.25.7"
+
+[tool.poetry.group.docs.dependencies]
+myst-parser = "^4.0.1"
+Sphinx = "^8.2.3"
+sphinx-rtd-theme = "^3.0.2"
 
 [build-system]
-requires = ["flit_core>=3.4,<4"]
-build-backend = "flit_core.buildapi"
-
-[tool.flit.module]
-name = "inter"
-
-[tool.flit.sdist]
-include = ["LICENSE", "README.md"]
-exclude = ["contrib", "docs", "pytest.ini", "tox.ini", "test*"]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
