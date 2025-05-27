@@ -28,7 +28,7 @@ repository = "https://github.com/lucasrcezimbra/bancointer"
 changelog = "https://github.com/lucasrcezimbra/bancointer/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
-python = ">=3.7"
+python = ">=3.11"
 attrs = "*"
 requests = "*"
 
