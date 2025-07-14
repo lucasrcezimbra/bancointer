@@ -100,11 +100,6 @@ def test_with_mocking(mocker):
 
 ## Development Workflow
 
-### Branch Strategy
-- **Main branch**: `master` (stable releases)
-- **Development branch**: `develop` (active development)
-- **Pull requests**: Must target `develop` branch
-
 ### Pre-commit Setup
 ```bash
 git clone https://github.com/lucasrcezimbra/bancointer
