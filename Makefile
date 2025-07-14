@@ -29,7 +29,7 @@ test:
 
 build:
 	@echo "Building package..."
-	. .venv/bin/activate && flit build
+	. .venv/bin/activate && python -m pip install --upgrade build && python -m build
 
 clean:
 	@echo "Cleaning build artifacts..."
