@@ -24,7 +24,7 @@ lint:
 
 test:
 	@echo "Running test suite..."
-	. .venv/bin/activate && pytest
+	. .venv/bin/activate && pytest --cov=inter
 
 build:
 	@echo "Building package..."
