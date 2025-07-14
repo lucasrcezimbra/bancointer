@@ -34,7 +34,7 @@ This file provides GitHub Copilot with repository-specific guidelines, code conv
 
 ### Documentation
 - **Docstring style**: Sphinx format with detailed parameter documentation
-- **Type annotations**: Use only for attrs fields. 
+- **Type annotations**: Use only for attrs fields.
 - **Parameter documentation**: Include `:param name:`, `:type name:`, `:return:`, `:rtype:`
 - **Language**: Mix of English and Portuguese (Portuguese for banking domain terms)
 
@@ -43,7 +43,7 @@ This file provides GitHub Copilot with repository-specific guidelines, code conv
 @define
 class DataModel:
     """Brief description.
-    
+
     :param field: Description
     :type field: Type
     """
@@ -53,15 +53,15 @@ class DataModel:
 class ServiceClass:
     """
     Service description.
-    
+
     :param param: Parameter description
     :type param: Type
     """
-    
+
     def method(self, param: Type) -> ReturnType:
         """
         Method description.
-        
+
         :param param: Parameter description
         :type param: Type
         :return: Return description
@@ -200,7 +200,7 @@ class BankData:
     amount: Decimal
     description: str
     date: date
-    
+
     @classmethod
     def from_data(cls, data: dict):
         """Create instance from API response data."""
@@ -216,10 +216,10 @@ class BankData:
 def api_method(self, param: Type) -> ReturnType:
     """
     Method description.
-    
+
     :param param: Parameter description
     :type param: Type
-    :return: Return description  
+    :return: Return description
     :rtype: ReturnType
     """
     # Implementation with proper error handling
