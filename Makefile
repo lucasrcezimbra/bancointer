@@ -16,7 +16,8 @@ install:
 	. .venv/bin/activate && \
 	  pip install --upgrade pip && \
 	  pip install -e .[test,build] && \
-	  pre-commit install
+	  pre-commit install && \
+	  pre-commit install-hooks
 
 lint:
 	@echo "Running linting and formatting checks..."

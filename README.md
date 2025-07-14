@@ -96,13 +96,18 @@ Contributions are welcome, feel free to open an Issue or Pull Request.
 
 Pull requests must be for the `develop` branch.
 
-```
+```bash
 git clone https://github.com/lucasrcezimbra/bancointer
 cd bancointer
 git checkout develop
-python -m venv .venv
-source .venv/bin/activate
-pip install .[test]
-pre-commit install
-pytest
+make install
+make test
 ```
+
+You can also use individual make targets:
+- `make help` - Show available commands
+- `make install` - Set up development environment  
+- `make lint` - Run code linting and formatting checks
+- `make test` - Run test suite
+- `make build` - Build the package
+- `make clean` - Clean build artifacts
