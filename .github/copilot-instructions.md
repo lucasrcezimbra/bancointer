@@ -34,7 +34,6 @@ This file provides GitHub Copilot with repository-specific guidelines, code conv
 
 ### Documentation
 - **Docstring style**: Sphinx format with detailed parameter documentation
-- **Type annotations**: Use only for attrs fields.
 - **Parameter documentation**: Include `:param name:`, `:type name:`, `:return:`, `:rtype:`
 - **Language**: Mix of English and Portuguese (Portuguese for banking domain terms)
 
@@ -101,16 +100,6 @@ def test_with_mocking(mocker):
 ## Development Workflow
 
 ### Pre-commit Setup
-```bash
-git clone https://github.com/lucasrcezimbra/bancointer
-cd bancointer
-git checkout develop
-python -m venv .venv
-source .venv/bin/activate
-pip install .[test]
-pre-commit install
-pytest
-```
 
 ### Code Quality Tools
 - **Black**: Code formatting (automatically applied)
@@ -146,35 +135,15 @@ pytest
 ### Development Dependencies
 - `pytest`: Testing framework
 - `faker`: Test data generation
-- `responses`: HTTP response mocking
 - `pre-commit`: Code quality automation
 
 ## Error Handling
 
 ### Patterns
+- Let HTTP errors bubble up from `requests` library
 - Use appropriate exception types for domain-specific errors
 - Validate input parameters early in methods
 - Provide clear error messages with context
-
-## Contribution Guidelines
-
-### Code Changes
-- Make minimal, focused changes
-- Ensure all tests pass before submitting PR
-- Update documentation if adding new features
-- Follow existing code patterns and conventions
-
-### New Features
-- Add comprehensive tests for new functionality
-- Update relevant documentation
-- Consider both high-level (`Inter`) and low-level (`Client`) APIs
-- Provide fake implementations in `inter.testing` if applicable
-
-### API Design
-- Maintain backward compatibility when possible
-- Use clear, descriptive method names
-- Follow Python naming conventions (`snake_case`)
-- Return appropriate data types (use data classes for structured data)
 
 ## Common Patterns
 
