@@ -142,7 +142,6 @@ pytest
 ### Core Dependencies
 - `attrs`: For data classes (use `@define` decorator)
 - `requests`: For HTTP client functionality
-- Keep dependencies minimal - only add what's necessary
 
 ### Development Dependencies
 - `pytest`: Testing framework
