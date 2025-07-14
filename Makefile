@@ -12,10 +12,11 @@ help:
 
 install:
 	@echo "Installing project dependencies..."
-	python -m venv .venv || true
-	. .venv/bin/activate && pip install --upgrade pip
-	. .venv/bin/activate && pip install -e .[test,build]
-	. .venv/bin/activate && pre-commit install
+	[ -d .venv ] || python -m venv .venv
+	. .venv/bin/activate && \
+	  pip install --upgrade pip && \
+	  pip install -e .[test,build] && \
+	  pre-commit install
 
 lint:
 	@echo "Running linting and formatting checks..."
