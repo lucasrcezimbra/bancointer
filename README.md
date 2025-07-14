@@ -106,7 +106,7 @@ make test
 
 You can also use individual make targets:
 - `make help` - Show available commands
-- `make install` - Set up development environment  
+- `make install` - Set up development environment
 - `make lint` - Run code linting and formatting checks
 - `make test` - Run test suite
 - `make build` - Build the package
