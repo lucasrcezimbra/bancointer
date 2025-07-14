@@ -34,7 +34,7 @@ This file provides GitHub Copilot with repository-specific guidelines, code conv
 
 ### Documentation
 - **Docstring style**: Sphinx format with detailed parameter documentation
-- **Type annotations**: Use throughout, including return types
+- **Type annotations**: Use only for attrs fields. 
 - **Parameter documentation**: Include `:param name:`, `:type name:`, `:return:`, `:rtype:`
 - **Language**: Mix of English and Portuguese (Portuguese for banking domain terms)
 
