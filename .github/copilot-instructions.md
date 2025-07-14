@@ -152,7 +152,6 @@ pytest
 ## Error Handling
 
 ### Patterns
-- Let HTTP errors bubble up from `requests` library
 - Use appropriate exception types for domain-specific errors
 - Validate input parameters early in methods
 - Provide clear error messages with context
