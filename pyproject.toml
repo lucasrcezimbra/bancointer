@@ -38,7 +38,7 @@ build = [
 docs = [
   "myst-parser==4.0.1",
   "Sphinx==8.2.3",
-  "sphinx-rtd-theme==3.0.2",
+  "sphinx-rtd-theme==3.1.0",
 ]
 test = [
   "bump2version==1.0.1",
