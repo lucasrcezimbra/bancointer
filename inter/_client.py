@@ -1,5 +1,7 @@
 import requests
 
+DEFAULT_TIMEOUT = 30  # seconds (connect + read)
+
 
 class URL:
     BASE = "https://cdpj.partners.bancointer.com.br/"
@@ -33,7 +35,7 @@ class InterAPIError(Exception):
 
 
 def _ensure_success(response):
-    if response.status_code >= 400:
+    if response.status_code != 200:
         raise InterAPIError(response)
     return response
 
@@ -87,6 +89,7 @@ class Client:
                     "grant_type": "client_credentials",
                 },
                 cert=(self.cert_path, self.key_path),
+            timeout=DEFAULT_TIMEOUT,
             )
         )
         return response.json()["access_token"]
@@ -117,6 +120,7 @@ class Client:
                 params=params,
                 headers=self.headers,
                 cert=(self.cert_path, self.key_path),
+            timeout=DEFAULT_TIMEOUT,
             )
         )
         return response.json()
@@ -131,6 +135,7 @@ class Client:
                 },
                 headers=self.headers,
                 cert=(self.cert_path, self.key_path),
+            timeout=DEFAULT_TIMEOUT,
             )
         )
         return response.json()
@@ -171,6 +176,7 @@ class Client:
                 },
                 headers=self.headers,
                 cert=(self.cert_path, self.key_path),
+            timeout=DEFAULT_TIMEOUT,
             )
         )
         return response.json()
