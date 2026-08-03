@@ -89,7 +89,7 @@ class Client:
                     "grant_type": "client_credentials",
                 },
                 cert=(self.cert_path, self.key_path),
-            timeout=DEFAULT_TIMEOUT,
+                timeout=DEFAULT_TIMEOUT,
             )
         )
         return response.json()["access_token"]
@@ -120,7 +120,7 @@ class Client:
                 params=params,
                 headers=self.headers,
                 cert=(self.cert_path, self.key_path),
-            timeout=DEFAULT_TIMEOUT,
+                timeout=DEFAULT_TIMEOUT,
             )
         )
         return response.json()
@@ -135,7 +135,7 @@ class Client:
                 },
                 headers=self.headers,
                 cert=(self.cert_path, self.key_path),
-            timeout=DEFAULT_TIMEOUT,
+                timeout=DEFAULT_TIMEOUT,
             )
         )
         return response.json()
@@ -176,7 +176,7 @@ class Client:
                 },
                 headers=self.headers,
                 cert=(self.cert_path, self.key_path),
-            timeout=DEFAULT_TIMEOUT,
+                timeout=DEFAULT_TIMEOUT,
             )
         )
         return response.json()

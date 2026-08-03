@@ -254,16 +254,16 @@ def test_token_raises_on_non_200(client):
     with pytest.raises(InterAPIError) as exc:
         _ = client.token
 
-    assert exc.value.status_code == 400
+    assert exc.value.status_code == 400
+
 
 def test_raises_on_redirect(mocker, client, mock_token):
     response = mocker.Mock()
     response.status_code = 302
-    response.json.side_effect = ValueError('no json')
-    response.text = 'redirect'
-    mocker.patch('inter._client.requests.get', return_value=response)
+    response.json.side_effect = ValueError("no json")
+    response.text = "redirect"
+    mocker.patch("inter._client.requests.get", return_value=response)
     with pytest.raises(InterAPIError) as exc:
         client.get_balance()
     assert exc.value.status_code == 302
-    assert exc.value.payload == 'redirect'
-
+    assert exc.value.payload == "redirect"
