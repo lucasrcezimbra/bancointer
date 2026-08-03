@@ -4,7 +4,7 @@ import pytest
 import responses
 from responses import matchers
 
-from inter import Client, Scopes
+from inter import Client, InterAPIError, Scopes
 from inter._client import URL
 
 
@@ -224,3 +224,34 @@ def test_pay_barcode_future(faker, client, pay_barcode_data):
     assert (
         client.pay_barcode(barcode, value, due_date, payment_date) == pay_barcode_data
     )
+
+
+@responses.activate
+def test_get_balance_raises_on_non_200(client):
+    client._token = uuid4()
+
+    responses.get(
+        URL.BALANCE,
+        json={"title": "Unauthorized", "detail": "invalid token"},
+        status=401,
+    )
+
+    with pytest.raises(InterAPIError) as exc:
+        client.get_balance()
+
+    assert exc.value.status_code == 401
+    assert exc.value.payload["detail"] == "invalid token"
+
+
+@responses.activate
+def test_token_raises_on_non_200(client):
+    responses.post(
+        URL.AUTH,
+        json={"error": "invalid_client"},
+        status=400,
+    )
+
+    with pytest.raises(InterAPIError) as exc:
+        _ = client.token
+
+    assert exc.value.status_code == 400

@@ -19,6 +19,27 @@ class Scopes:
     all = (READ_STATEMENTS, WRITE_PAYMENT)
 
 
+class InterAPIError(Exception):
+    """Raised when Banco Inter responds with a non-success HTTP status."""
+
+    def __init__(self, response):
+        self.response = response
+        self.status_code = response.status_code
+        try:
+            self.payload = response.json()
+        except ValueError:
+            self.payload = response.text
+        super().__init__(
+            f"Banco Inter API error {self.status_code}: {self.payload}"
+        )
+
+
+def _ensure_success(response):
+    if response.status_code >= 400:
+        raise InterAPIError(response)
+    return response
+
+
 class Client:
     """
     Inicializa utilizando as credenciais.
@@ -58,15 +79,17 @@ class Client:
         self._token = None
 
     def _get_token(self):
-        response = requests.post(
-            URL.AUTH,
-            data={
-                "client_id": self.client_id,
-                "client_secret": self.client_secret,
-                "scope": " ".join(self.scopes),
-                "grant_type": "client_credentials",
-            },
-            cert=(self.cert_path, self.key_path),
+        response = _ensure_success(
+            requests.post(
+                URL.AUTH,
+                data={
+                    "client_id": self.client_id,
+                    "client_secret": self.client_secret,
+                    "scope": " ".join(self.scopes),
+                    "grant_type": "client_credentials",
+                },
+                cert=(self.cert_path, self.key_path),
+            )
         )
         return response.json()["access_token"]
 
@@ -90,23 +113,27 @@ class Client:
         if date:
             params["dataSaldo"] = date.strftime("%Y-%m-%d")
 
-        response = requests.get(
-            URL.BALANCE,
-            params=params,
-            headers=self.headers,
-            cert=(self.cert_path, self.key_path),
+        response = _ensure_success(
+            requests.get(
+                URL.BALANCE,
+                params=params,
+                headers=self.headers,
+                cert=(self.cert_path, self.key_path),
+            )
         )
         return response.json()
 
     def get_statements(self, start_date, end_date):
-        response = requests.get(
-            URL.STATEMENTS,
-            params={
-                "dataInicio": start_date.strftime("%Y-%m-%d"),
-                "dataFim": end_date.strftime("%Y-%m-%d"),
-            },
-            headers=self.headers,
-            cert=(self.cert_path, self.key_path),
+        response = _ensure_success(
+            requests.get(
+                URL.STATEMENTS,
+                params={
+                    "dataInicio": start_date.strftime("%Y-%m-%d"),
+                    "dataFim": end_date.strftime("%Y-%m-%d"),
+                },
+                headers=self.headers,
+                cert=(self.cert_path, self.key_path),
+            )
         )
         return response.json()
 
@@ -133,17 +160,19 @@ class Client:
         :return: resposta da API
         :rtype: :class:`dict`
         """
-        response = requests.post(
-            URL.PAYMENTS,
-            json={
-                "codBarraLinhaDigitavel": barcode,
-                "valorPagar": str(value),
-                "dataVencimento": due_date.strftime("%Y-%m-%d"),
-                "dataPagamento": (
-                    payment_date.strftime("%Y-%m-%d") if payment_date else None
-                ),
-            },
-            headers=self.headers,
-            cert=(self.cert_path, self.key_path),
+        response = _ensure_success(
+            requests.post(
+                URL.PAYMENTS,
+                json={
+                    "codBarraLinhaDigitavel": barcode,
+                    "valorPagar": str(value),
+                    "dataVencimento": due_date.strftime("%Y-%m-%d"),
+                    "dataPagamento": (
+                        payment_date.strftime("%Y-%m-%d") if payment_date else None
+                    ),
+                },
+                headers=self.headers,
+                cert=(self.cert_path, self.key_path),
+            )
         )
         return response.json()
