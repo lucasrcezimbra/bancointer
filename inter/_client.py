@@ -29,9 +29,7 @@ class InterAPIError(Exception):
             self.payload = response.json()
         except ValueError:
             self.payload = response.text
-        super().__init__(
-            f"Banco Inter API error {self.status_code}: {self.payload}"
-        )
+        super().__init__(f"Banco Inter API error {self.status_code}: {self.payload}")
 
 
 def _ensure_success(response):
