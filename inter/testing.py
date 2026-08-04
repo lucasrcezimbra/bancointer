@@ -10,7 +10,7 @@ faker = Faker()
 
 def generate_operation_data():
     return {
-        "dataEntrada": faker.date(),
+        "dataEntrada": faker.date().isoformat(),
         "tipoTransacao": random.choice(Operation.TYPES),
         "tipoOperacao": random.choice(("C", "D")),
         "valor": str(faker.pyfloat(right_digits=2, positive=True)),
@@ -80,6 +80,9 @@ class InterFake(Inter):
     def __init__(self, *args, **kwargs):
         client = ClientFake()
         self.balance = faker.pydecimal(right_digits=2)
+        self.statement = [
+            Operation.from_data(item) for item in client.statements["transacoes"]
+        ]
         self.pay_barcode_data = Payment.from_data(client.pay_barcode_data)
 
     def get_balance(self, date=None):
