@@ -22,7 +22,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-import inter  # noqa
+import inter
 
 # -- General configuration ---------------------------------------------
 
